@@ -12,6 +12,7 @@
 
 ; Functions / builtins
 (builtin_function) @function.builtin
+(call_name) @function
 
 ; Types (<foo> convention)
 (type) @type

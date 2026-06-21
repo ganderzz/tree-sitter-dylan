@@ -248,6 +248,7 @@ module.exports = grammar({
         $.hash_word,
         $.number,
         $.operator,
+        $.call,
         $.identifier,
         $.punctuation,
       ),
@@ -256,6 +257,12 @@ module.exports = grammar({
     definer_keyword: ($) => choice(...DEFINER),
     modifier_keyword: ($) => choice(...MODIFIER),
     builtin_function: ($) => choice(...FUNCTION),
+
+    // foo(...) : an identifier immediately followed by "(" is a call.
+    // The "(" must be immediate (no space) so `if (x)` is not treated as a call.
+    // The name is aliased to its own node type so it does not also match the
+    // generic (identifier) highlight rule.
+    call: ($) => seq(alias($.identifier, $.call_name), token.immediate("(")),
 
     // <foo>, <my-class> : Dylan type-naming convention
     type: ($) => token(/<[a-zA-Z][a-zA-Z0-9_\-!?*]*>/),
